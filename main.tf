@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "example1" {
-  bucket = "hafizshoaib-test-first-bucket"
+  bucket = "hafizshoaib1-test-first-bucket"
 }
 
 
