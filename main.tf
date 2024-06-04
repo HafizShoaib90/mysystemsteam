@@ -43,6 +43,10 @@ tags = {
 
     # Restart the instance to apply DNS changes
     Restart-Computer -Force
+    
+    #install IIS
+    Install-WindowsFeature -Name Web-Server -IncludeManagementTools
+
 </powershell>
 EOF
 }
