@@ -11,11 +11,11 @@ data "aws_vpc" "already" {
 # Define the EC2 instance
 
 resource "aws_instance" "windows_instance" {
-  ami           = "ami-067de6f85aa9ad5f9" # Specify the Windows AMI ID
+  ami           = "ami-0c24dc9d92f3c28ea" # Specify the Windows AMI ID
   instance_type = "t2.micro"              # Change instance type as needed
-  key_name      = "testkp"            # Replace with your key pair name
-  subnet_id     = "subnet-0299237b9f4ec6060"       # Replace with your subnet ID
-  security_groups = ["sg-0f2f0debf121b4713"]  # Replace with your security group ID
+  key_name      = "my-keypair"            # Replace with your key pair name
+  subnet_id     = "subnet-0b8aa00f4cffb226c"       # Replace with your subnet ID
+  security_groups = ["sg-045a5603b91d34d21"]  # Replace with your security group ID
  
 
 tags = {
