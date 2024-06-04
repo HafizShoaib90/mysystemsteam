@@ -44,16 +44,16 @@ tags = {
     # Restart the instance to apply DNS changes
     Restart-Computer -Force
     
-    #install IIS
-    Install-WindowsFeature -Name Web-Server -IncludeManagementTools
+   # Define domain and credential information
+    $Domain = "shoaib.net"
+    $DomainUser = "admin"
+    $DomainPassword = "P@ssword1qaz"
 
+# Provide the credentials for joining the domain
+$Credential = New-Object System.Management.Automation.PSCredential ($DomainUser, (ConvertTo-SecureString $DomainPassword -AsPlainText -Force))
+
+# Join the computer to the domain
+Add-Computer -DomainName $Domain -Credential $Credential -Restart
 </powershell>
 EOF
 }
-
-
-# Output the public IP address of the instance
-
-  output "public_ip" {
-  value = aws_instance.windows_instance.public_ip
-  }
