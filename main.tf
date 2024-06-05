@@ -9,7 +9,7 @@ data "aws_vpc" "console" {
 
 resource "aws_subnet" "mysubnet" {
 vpc_id= data.aws_vpc.console.id  
-cidr_block = "192.168.1.24"
+cidr_block = "192.168.1.0/24"
 }
 
 
