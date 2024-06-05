@@ -6,7 +6,7 @@ resource "aws_instance" "Myserver" {
 ami= "ami-0e6552a39ee0995d6"
 instance_type = "t2.micro"
 subnet_id = "subnet-0299237b9f4ec6060" 
-security_groups = "sg-0864ecb531cc484cf"
+security_groups = ["sg-0864ecb531cc484cf"]
 key_name = "testkp"
 
 user_data = <<-EOF
