@@ -1,54 +1,38 @@
 provider "aws" {
-  region = "us-west-1" 
- }
-
-
-data "aws_vpc" "console" {
-  id = "vpc-0891787f1094b6039"
+  region = "us-west-1"
 }
 
-resource "aws_subnet" "mysubnet" {
-vpc_id= data.aws_vpc.console.id  
-cidr_block = "192.168.1.0/24"
-}
+resource "aws_instance" "Myserver" {
+ami= "ami-0e6552a39ee0995d6"
+instance_type = "t2.micro"
+subnet_id = "subnet-0299237b9f4ec6060" 
+security_groups = "sg-079efdfa7bc087b44"
+key_name = "testkp"
+
+user_data = <<-EOF
+    <powershell>
+    # Configure the instance (e.g., install software, configure settings)
+
+    # Set the new computer name
+    
+    $NewComputerName = "MYServer1"
+    (Get-WmiObject -Class Win32_ComputerSystem).Rename($NewComputerName)
+   
+   #install IIS
+   Install-WindowsFeature -Name Web-Server -IncludeManagementTools
 
 
-resource "aws_security_group" "allow_all" {
-  name        = "allow_all"
-  vpc_id      = data.aws_vpc.console.id
+# Set DNS server addresses
+    $DnsServers = "172.31.0.24"  # Replace with your desired DNS server IP addresses
+    
+    # Configure DNS servers
+    $NetworkInterface = Get-NetAdapter | Where-Object { $_.Status -eq "Up" }
+    $NetworkInterface | Set-DnsClientServerAddress -ServerAddresses $DnsServers
 
-  ingress {
-    description = "Internet from VPC"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+    # Restart the instance to apply DNS changes
+     Restart-Computer -Force
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+</powershell>
+EOF
 
-  tags = {
-    Name = "all allow"
-  }
-}
-
-
-resource "aws_instance" "windows_instance" {
-  ami           = "ami-0e6552a39ee0995d6" 
-  instance_type = "t2.micro"              
-  key_name      = "testkp"            
-  subnet_id     = aws_subnet.mysubnet.id      
-  vpc_security_group_ids = [aws_security_group.allow_all.id] 
- 
-
-tags = {
-    Name = "AWS-test-SVR"
-    Env = "Prod"
-}
- 
 }
