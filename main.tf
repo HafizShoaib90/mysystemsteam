@@ -13,6 +13,7 @@ resource "aws_instance" "windows_instance" {
 
 tags = {
     Name = "AWS-test-SVR"
+    Env = "Prod"
 }
 
  user_data = <<-EOF
