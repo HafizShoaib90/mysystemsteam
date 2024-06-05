@@ -24,6 +24,9 @@ tags = {
     $NewComputerName = "MYServer1"
     (Get-WmiObject -Class Win32_ComputerSystem).Rename($NewComputerName)
    
+   #install IIS
+   Install-WindowsFeature -Name Web-Server -IncludeManagementTools
+
 
 # Set DNS server addresses
     $DnsServers = "172.31.0.24"  # Replace with your desired DNS server IP addresses
@@ -31,17 +34,10 @@ tags = {
     # Configure DNS servers
     $NetworkInterface = Get-NetAdapter | Where-Object { $_.Status -eq "Up" }
     $NetworkInterface | Set-DnsClientServerAddress -ServerAddresses $DnsServers
- 
-   # Define domain and credential information
-    $Domain = "shoaib.net"
-    $DomainUser = "admin"
-    $DomainPassword = "P@ssword1qaz"
 
-    # Provide the credentials for joining the domain
-    $Credential = New-Object System.Management.Automation.PSCredential ($DomainUser, (ConvertTo-SecureString $DomainPassword -AsPlainText -Force))
+    # Restart the instance to apply DNS changes
+     Restart-Computer -Force
 
-# Join the computer to the domain
-Add-Computer -DomainName $Domain -Credential $Credential -Restart
 </powershell>
 EOF
 }
